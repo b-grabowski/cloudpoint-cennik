@@ -1,0 +1,39 @@
+
+function login() {
+    const email = document.getElementById("emailInput").value;
+
+    fetch("/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            sessionStorage.setItem("loggedInUser", email);  // Zapisanie zalogowanego użytkownika
+            window.location.href = "index.html";  // Przekierowanie na stronę główną
+        } else {
+            document.getElementById("errorMessage").style.display = "block";  // Pokazuje komunikat o błędzie
+        }
+    })
+    .catch(error => console.error("Błąd logowania:", error));
+}
+
+
+function logout() {
+    // Usuwanie użytkownika z sessionStorage
+    sessionStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";  // Przekierowanie do strony logowania
+}
+
+// Funkcja sprawdzająca, czy użytkownik jest zalogowany
+function checkLoginStatus() {
+    const loggedInUser = sessionStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+        document.getElementById("welcomeMessage").innerText = `Witaj, ${loggedInUser}!`;  // Powitanie użytkownika
+    } else {
+        window.location.href = "login.html";  // Przekierowanie do strony logowania
+    }
+}

@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  web:
+    image: node:20  # Użycie najnowszej wersji Node.js
+    container_name: cloudpoint-node
+    working_dir: /usr/src/app
+    volumes:
+      - /opt/website/cloudpoint:/usr/src/app
+    ports:
+      - "80:3000"
+    command: bash -c "npm install && npm start"  # Lepsza praktyka: używanie npm start zamiast node server.js
+    environment:
+      - NODE_ENV=production
+    networks:
+      - webnet
+    restart: always  # Dodanie restartu kontenera w przypadku awarii
+
+networks:
+  webnet:
+    driver: bridge
